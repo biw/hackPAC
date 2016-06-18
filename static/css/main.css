@@ -51,3 +51,60 @@ a {
 	color: rgb(27, 155, 40);
 }
 /* Various other styles end */
+
+
+
+/* new stuff for navbar */
+post {
+    display: block;
+    height: 60px;
+    line-height: 60px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 5px 5px 0px 0px;
+    font-size: 20px;
+}
+votes {
+    background: #61a2ef;
+    display: inline-block;
+    padding: 0px 10px;
+    margin: 0px;
+    color: #fff;
+}
+
+
+votes.used {
+    background: #61c76b;
+}
+
+upvote:hover {
+    cursor: pointer;
+}
+
+upvote {
+    display: inline-block;
+    background: #61c76b;
+    padding: 0px 11px;
+    margin: 0px 0px 0px -6px;
+    color: #fff;
+}
+
+votes a {
+    padding: 0px 0px 0px 10px;
+}
+
+sub-post:hover {
+    cursor: pointer;
+}
+sub-post {
+    display: block;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0px 0px 5px 5px;
+    padding: 5px 10px;
+}
+
+article-holder {
+    display: block;
+    margin: 0px 0px 25px 0px;
+}
