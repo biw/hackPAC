@@ -6,6 +6,7 @@ import os
 
 from werkzeug.serving import run_simple
 from flask import Flask, render_template, request
+from flask_api import status
 from logging import Formatter, FileHandler
 
 
@@ -62,11 +63,54 @@ def forgot():
     return render_template('forms/forgot.html', form=form)
 
 
-@app.route("/api/upvote")
-def upvote():
-    return None
+# route to change which post the user is voting for
+@app.route("/api/vote", methods=["POST"])
+def vote():
+
+    # try to parse the form inputs as an int
+    # if something is not correct, return a 400
+    try:
+        vote_id = int(request.form["vote_id"])
+        user_id = int(request.form["user_id"])
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    # create a cursor to edit the database
+    cursor = conn.cursor()
+
+    # update the vote of the user
+    cursor.execute('''UPDATE users SET vote_id=? WHERE user_id=?''',
+                   (vote_id, user_id))
+
+    # commit the change to the db
+    cursor.close()
+    conn.commit()
+
+    # return 202
+    return "", status.HTTP_202_ACCEPTED
 
 
+# route to get the most recent posts
+@app.route("/api/get_posts", methods=["GET"])
+def get_posts():
+
+    # to start: we are only going to be able to query this to get the
+    # top voted posts (in the future we may add more ways)
+    try:
+        count = int(request.form["count"])
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    cursor = conn.cursor()
+
+    cursor.execute('''SELECT posts.id, posts.user_id, posts.url,
+        posts.description FROM users INNER JOIN posts GROUP BY
+        vote_id ORDER BY count(vote_id) DESC LIMIT 1''')
+
+    #not done
+
+
+@app.route
 # Error handlers.
 @app.errorhandler(500)
 def internal_error(error):
