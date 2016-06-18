@@ -3,11 +3,13 @@
 #----------------------------------------------------------------------------#
 
 from flask import Flask, render_template, request
-# from flask.ext.sqlalchemy import SQLAlchemy
+import sqlite3
 import logging
 from logging import Formatter, FileHandler
 from forms import *
 import os
+
+conn = sqlite3.connect('database.db')
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -68,12 +70,16 @@ def forgot():
     form = ForgotForm(request.form)
     return render_template('forms/forgot.html', form=form)
 
-# Error handlers.
+
+@app.route("/api/upvote")
+def upvote():
+
+    # Error handlers.
 
 
 @app.errorhandler(500)
 def internal_error(error):
-    #db_session.rollback()
+    # db_session.rollback()
     return render_template('errors/500.html'), 500
 
 
@@ -84,7 +90,8 @@ def not_found_error(error):
 if not app.debug:
     file_handler = FileHandler('error.log')
     file_handler.setFormatter(
-        Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
+        Formatter(
+            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
     )
     app.logger.setLevel(logging.INFO)
     file_handler.setLevel(logging.INFO)
