@@ -32,5 +32,22 @@ a {
 /*****************************************************************************
  * Various other styles
  ****************************************************************************/
+.center-container {
+	text-align: center;
+}
+.col-center {
+	display: block;
+	margin-top: 30px;
+	margin-left: 300px;
+}
 
+.flip-clock-label {
+	font-weight: bold;
+	font-size: 15px;
+	font-family: sans-serif;
+}
+
+.money {
+	color: rgb(27, 155, 40);
+}
 /* Various other styles end */

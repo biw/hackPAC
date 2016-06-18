@@ -50,7 +50,6 @@ function upvote(id) {
 		selectedArticle = article;
 		location.reload();
 	}
-
 }
 
 function getArticleById(articleid) {

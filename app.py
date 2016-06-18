@@ -1,13 +1,15 @@
-#----------------------------------------------------------------------------#
-# Imports
-#----------------------------------------------------------------------------#
+import forms  # this is the local file forms.py
 
-from flask import Flask, render_template, request
-# from flask.ext.sqlalchemy import SQLAlchemy
+import sqlite3
 import logging
-from logging import Formatter, FileHandler
-from forms import *
 import os
+import json
+
+from werkzeug.serving import run_simple
+from flask import Flask, render_template, request
+from flask_api import status
+from logging import Formatter, FileHandler
+
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -15,27 +17,21 @@ import os
 
 app = Flask(__name__)
 app.config.from_object('config')
-#db = SQLAlchemy(app)
-
-# Automatically tear down SQLAlchemy.
-'''
-@app.teardown_request
-def shutdown_session(exception=None):
-    db_session.remove()
-'''
+basedir = os.path.abspath(os.path.dirname(__file__))
+db_url = os.path.join(basedir, 'database.db')
 
 # Login required decorator.
-'''
-def login_required(test):
-    @wraps(test)
-    def wrap(*args, **kwargs):
-        if 'logged_in' in session:
-            return test(*args, **kwargs)
-        else:
-            flash('You need to login first.')
-            return redirect(url_for('login'))
-    return wrap
-'''
+#
+# def login_required(test):
+#    @wraps(test)
+#    def wrap(*args, **kwargs):
+#        if 'logged_in' in session:
+#            return test(*args, **kwargs)
+#        else:
+#            flash('You need to login first.')
+#            return redirect(url_for('login'))
+#    return wrap
+#
 #----------------------------------------------------------------------------#
 # Controllers.
 #----------------------------------------------------------------------------#
@@ -53,55 +49,152 @@ def about():
 
 @app.route('/login')
 def login():
-    form = LoginForm(request.form)
+    form = forms.LoginForm(request.form)
     return render_template('forms/login.html', form=form)
 
 
 @app.route('/register')
 def register():
-    form = RegisterForm(request.form)
+    form = forms.RegisterForm(request.form)
     return render_template('forms/register.html', form=form)
 
 
 @app.route('/forgot')
 def forgot():
-    form = ForgotForm(request.form)
+    form = forms.ForgotForm(request.form)
     return render_template('forms/forgot.html', form=form)
 
-# Error handlers.
+
+# route to change which post the user is voting for
+@app.route("/api/vote", methods=["POST"])
+def vote():
+
+    conn = sqlite3.connect(db_url)
+    # try to parse the form inputs as an int
+    # if something is not correct, return a 400
+    try:
+        vote_id = int(request.form["vote_id"])
+        user_id = int(request.form["user_id"])
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    # create a cursor to edit the database
+    cursor = conn.cursor()
+
+    # update the vote of the user
+    cursor.execute('''UPDATE users SET vote_id=? WHERE user_id=?''',
+                   (vote_id, user_id,))
+
+    # commit the change to the db
+    cursor.close()
+    conn.commit()
+    conn.close()
+
+    # return 202
+    return "", status.HTTP_202_ACCEPTED
 
 
-@app.errorhandler(500)
-def internal_error(error):
-    #db_session.rollback()
-    return render_template('errors/500.html'), 500
+# route to get the most recent posts
+@app.route("/api/get_posts", methods=["GET"])
+def get_posts():
+
+    conn = sqlite3.connect(db_url)
+    # to start: we are only going to be able to query this to get the
+    # top voted posts (in the future we may add more ways)
+    try:
+        print(request.args.get)
+        count = int(request.args.get("count"))
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    cursor = conn.cursor()
+
+    cursor.execute('''SELECT id, user_id, url,
+        description, vote_count FROM posts ORDER BY vote_count DESC
+        LIMIT ?''', (count,))
+
+    results = cursor.fetchall()
+    conn.close()
+
+    return json.dumps(results, sort_keys=True,
+                      indent=4, separators=(",", ": ")),
+    status.HTTP_202_ACCEPTED
 
 
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('errors/404.html'), 404
+@app.route("/api/get_post", methods=["GET"])
+def get_post():
 
-if not app.debug:
-    file_handler = FileHandler('error.log')
-    file_handler.setFormatter(
-        Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
-    )
-    app.logger.setLevel(logging.INFO)
-    file_handler.setLevel(logging.INFO)
-    app.logger.addHandler(file_handler)
-    app.logger.info('errors')
+    conn = sqlite3.connect(db_url)
+    try:
+        post_id = int(request.args.get("post_id"))
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    cursor = conn.cursor()
+
+    cursor.execute('''SELECT id, user_id, url, description, vote_count FROM
+        posts WHERE id=?''', (post_id,))
+
+    results = cursor.fetchone()
+    conn.close()
+
+    return json.dumps(results, sort_keys=True,
+                      indent=4, separators=(",", ": ")),
+    status.HTTP_202_ACCEPTED
+
+
+@app.route("/api/get_user_post", methods=["GET"])
+def get_user_post():
+
+    conn = sqlite3.connect(db_url)
+    try:
+        user_id = int(request.args.get("user_id"))
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    cursor = conn.cursor()
+
+    cursor.execute('''SELECT id, user_id, url, description, vote_count FROM
+        posts WHERE user_id=?''', (user_id,))
+
+    results = cursor.fetchone()
+    conn.close()
+
+    return json.dumps(results, sort_keys=True,
+                      indent=4, separators=(",", ": ")),
+    status.HTTP_202_ACCEPTED
+
+
+@app.route("/api/create_post", methods=["POST"])
+def create_post():
+
+    conn = sqlite3.connect(db_url)
+    try:
+        post_url = request.form["post_url"]
+        user_id = int(request.form["user_id"])
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    conn.close()
+    return None
+
+
+# @app.route
+# # Error handlers.
+# @app.errorhandler(500)
+# def internal_error(error):
+#     # db_session.rollback()
+#     return render_template('errors/500.html'), 500
+
+
+# @app.errorhandler(404)
+# def not_found_error(error):
+#     return render_template('errors/404.html'), 404
 
 #----------------------------------------------------------------------------#
 # Launch.
 #----------------------------------------------------------------------------#
 
-# Default port:
 if __name__ == '__main__':
-    app.run()
-
-# Or specify port manually:
-'''
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-'''
+    run_simple("0.0.0.0", 5000, app,
+               use_reloader=True, use_debugger=True, use_evalex=True)
