@@ -14,7 +14,8 @@ $(document).ready(function(){
 
 	    //replace the paragraph text to close it
 	    var p_text = $(this).html()
-	    p_text = p_text.replace("+ Open", "- Close")
+	    p_text = p_text.replace("+ Look closely ", "- I'm done")
+	    // $("#emoticon").innerHTML = 
 	    $(this).html(p_text)
 
 	    //switch the view class
