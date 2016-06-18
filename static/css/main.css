@@ -119,3 +119,16 @@ article-holder {
 .hidden-frame {
     display: none;
 }
+
+.right-right {
+	float: right;
+}
+
+.right-right span {
+	vertical-align: center;
+	width: 92px; height: 20px;
+}
+
+.fb_iframe_widget span {
+	vertical-align: baseline !important;
+}
