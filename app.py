@@ -39,7 +39,9 @@ db_url = os.path.join(basedir, 'database.db')
 
 @app.route('/')
 def home():
-    return render_template('pages/placeholder.home.html')
+    # create_posts()
+    posts = get_posts_2()
+    return render_template('pages/placeholder.home.html', posts=posts)
 
 
 @app.route('/dashboard')
@@ -179,6 +181,37 @@ def create_post():
     return None
 
 
+def get_posts_2():
+
+    conn = sqlite3.connect(db_url)
+    # to start: we are only going to be able to query this to get the
+    # top voted posts (in the future we may add more ways)
+    # try:
+    #     print(request.args.get)
+    #     count = int(request.args.get("count"))
+    # except:
+    #     return "", status.HTTP_400_BAD_REQUEST
+
+    count = 9
+
+    cursor = conn.cursor()
+
+    cursor.execute('''SELECT id, user_id, url,
+        description, vote_count FROM posts ORDER BY vote_count DESC
+        LIMIT ? , ?''', (2,count))
+
+    results = cursor.fetchall()
+    conn.close()
+    print results
+    return results,
+    status.HTTP_202_ACCEPTED
+
+def create_posts():
+    db = sqlite3.connect(db_url);
+    db.execute('''INSERT INTO posts (user_id, url, description, vote_count) VALUES (?,?,?,?) ''', [1, 'https://www.nrdc.org/issues/water-pollution', "It's about time we got serious about drinking water", 102])
+    db.execute('''INSERT INTO posts (user_id, url, description, vote_count) VALUES (?,?,?,?) ''', [2, 'http://www.cnn.com', "Iowa is about to stop paying for the homeless. WTF", 99])
+    
+    db.commit()
 # @app.route
 # # Error handlers.
 # @app.errorhandler(500)

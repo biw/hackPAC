@@ -6,32 +6,25 @@
 
 <div class="clock col-center"></div>
 
+
 <div id="articles">
+
+    {% for post in posts %}
+    {% for p in post %}
     <article-holder>
     <post>
-        <votes>100</votes>
+        <votes>{{p[4]}}</votes>
         <upvote>▲</upvote>
-        <a href=""><post-title>It's about time we got serious about drinking water</post-title></a>
+        <a href=""><post-title>{{p[3]}}</post-title></a>
     </post>
 <sub-post class="sub-post-min">
-    <iframe class="hidden-frame" hidden-src="https://www.nrdc.org/issues/water-pollution"></iframe>
-    <p>+ Open the <a href="https://cleanwater.com">cleanwater.com</a> article inline</p>
+    <iframe class="hidden-frame" hidden-src="{{p[2]}}"></iframe>
+    <p>+ Open the article inline</p>
     </sub-post>
 
     </article-holder>
-
-        <article-holder>
-    <post>
-        <votes>99</votes>
-        <upvote class="used">▲</upvote>
-        <a href=""><post-title>Iowa is about to stop paying for the homeless. WTF</post-title></a>
-    </post>
-<sub-post class="sub-post-min">
-<iframe class="hidden-frame" hidden-src="http://www.cnn.com"></iframe>
-    <p>+ Open the <a href="https://cnn.com">cnn.com</a> article inline</p>
-    </sub-post>
-    </article-holder>
-
+    {% endfor %}
+    {% endfor %}
 </div>
 
 <script type="text/javascript">
