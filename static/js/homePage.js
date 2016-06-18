@@ -13,10 +13,10 @@ $(document).ready(function(){
 	    iframe.attr("src", hidden_src)
 
 	    //replace the paragraph text to close it
-	    var p_text = $(this).html()
-	    p_text = p_text.replace("+ Look closely ", "- I'm done")
-	    // $("#emoticon").innerHTML = 
-	    $(this).html(p_text)
+	    var p_text = $(this).html();
+	    p_text = p_text.replace("+ Look closely ", "- I'm done!");
+	    //document.getElementById('emoticon').innerHTML = "<i class='em em---1'></i>";
+	    $(this).html(p_text);
 
 	    //switch the view class
 	    $(this).parent().removeClass("sub-post-min")
