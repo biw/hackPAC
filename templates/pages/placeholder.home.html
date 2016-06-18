@@ -8,74 +8,31 @@
 
 <div id="articles">
     <article-holder>
-    <post>
-        <votes>100</votes>
-        <upvote>▲</upvote>
-        <a href=""><post-title>It's about time we got serious about drinking water</post-title></a>
-    </post>
-<sub-post class="sub-post-min">
-    <iframe class="hidden-frame" hidden-src="https://www.nrdc.org/issues/water-pollution"></iframe>
-    <p>+ Open the <a href="https://cleanwater.com">cleanwater.com</a> article inline</p>
-    </sub-post>
+	    <post>
+	        <votes>100</votes>
+	        <upvote>▲</upvote>
+	        <a href=""><post-title>It's about time we got serious about drinking water</post-title></a>
+	    </post>
+		<sub-post class="sub-post-min">
+		    <iframe class="hidden-frame" hidden-src="https://www.nrdc.org/issues/water-pollution"></iframe>
+		    <p>+ Open the <a href="https://cleanwater.com">cleanwater.com</a> article inline</p>
+	    </sub-post>
 
     </article-holder>
 
-        <article-holder>
-    <post>
-        <votes>99</votes>
-        <upvote class="used">▲</upvote>
-        <a href=""><post-title>Iowa is about to stop paying for the homeless. WTF</post-title></a>
-    </post>
-<sub-post class="sub-post-min">
-<iframe class="hidden-frame" hidden-src="http://www.cnn.com"></iframe>
-    <p>+ Open the <a href="https://cnn.com">cnn.com</a> article inline</p>
-    </sub-post>
+    <article-holder>
+    	<post>
+	        <votes>99</votes>
+	        <upvote class="used">▲</upvote>
+	        <a href=""><post-title>Iowa is about to stop paying for the homeless. WTF</post-title></a>
+    	</post>
+		<sub-post class="sub-post-min">
+			<iframe class="hidden-frame" hidden-src="http://www.cnn.com"></iframe>
+		    <p>+ Open the <a href="https://cnn.com">cnn.com</a> article inline</p>
+	    </sub-post>
     </article-holder>
 
 </div>
-
-<script type="text/javascript">
-    $(document.body).on("click", "sub-post.sub-post-min>p",function() {
-
-        // get the iframe and the hidden_src
-        var iframe = $(this).prev()
-        var hidden_src = iframe.attr("hidden-src")
-
-        //add the iframe items, and show it
-        iframe.addClass("article-frame")
-        iframe.removeClass("hidden-frame")
-        iframe.attr("src", hidden_src)
-
-        //replace the paragraph text to close it
-        var p_text = $(this).html()
-        p_text = p_text.replace("+ Open", "- Close")
-        $(this).html(p_text)
-
-        //switch the view class
-        $(this).parent().removeClass("sub-post-min")
-        $(this).parent().addClass("sub-post-max")
-    })
-
-    $(document.body).on("click", "sub-post.sub-post-max>p",function() {
-
-        // get the iframe and the hidden_src
-        var iframe = $(this).prev()
-
-        //add the iframe items, and show it
-        iframe.addClass("hidden-frame")
-        iframe.removeClass("article-frame")
-        iframe.attr("src", "")
-
-        //replace the paragraph text to close it
-        var p_text = $(this).html()
-        p_text = p_text.replace("- Close", "+ Open")
-        $(this).html(p_text)
-
-        //switch the view class
-        $(this).parent().removeClass("sub-post-max")
-        $(this).parent().addClass("sub-post-min")
-    })
-</script>
 
 
 {% endblock %}
