@@ -192,13 +192,13 @@ def get_posts_2():
     # except:
     #     return "", status.HTTP_400_BAD_REQUEST
 
-    count = 9
+    count = 11
 
     cursor = conn.cursor()
 
     cursor.execute('''SELECT id, user_id, url,
         description, vote_count FROM posts ORDER BY vote_count DESC
-        LIMIT ? , ?''', (2,count))
+        LIMIT ? , ?''', (0,count))
 
     results = cursor.fetchall()
     conn.close()
