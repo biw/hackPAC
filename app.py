@@ -3,6 +3,7 @@ import forms  # this is the local file forms.py
 import sqlite3
 import logging
 import os
+import json
 
 from werkzeug.serving import run_simple
 from flask import Flask, render_template, request
@@ -16,7 +17,8 @@ from logging import Formatter, FileHandler
 
 app = Flask(__name__)
 app.config.from_object('config')
-conn = sqlite3.connect('database.db')
+basedir = os.path.abspath(os.path.dirname(__file__))
+db_url = os.path.join(basedir, 'database.db')
 
 # Login required decorator.
 #
@@ -67,6 +69,7 @@ def forgot():
 @app.route("/api/vote", methods=["POST"])
 def vote():
 
+    conn = sqlite3.connect(db_url)
     # try to parse the form inputs as an int
     # if something is not correct, return a 400
     try:
@@ -80,11 +83,12 @@ def vote():
 
     # update the vote of the user
     cursor.execute('''UPDATE users SET vote_id=? WHERE user_id=?''',
-                   (vote_id, user_id))
+                   (vote_id, user_id,))
 
     # commit the change to the db
     cursor.close()
     conn.commit()
+    conn.close()
 
     # return 202
     return "", status.HTTP_202_ACCEPTED
@@ -94,33 +98,98 @@ def vote():
 @app.route("/api/get_posts", methods=["GET"])
 def get_posts():
 
+    conn = sqlite3.connect(db_url)
     # to start: we are only going to be able to query this to get the
     # top voted posts (in the future we may add more ways)
     try:
-        count = int(request.form["count"])
+        print(request.args.get)
+        count = int(request.args.get("count"))
     except:
         return "", status.HTTP_400_BAD_REQUEST
 
     cursor = conn.cursor()
 
-    cursor.execute('''SELECT posts.id, posts.user_id, posts.url,
-        posts.description FROM users INNER JOIN posts GROUP BY
-        vote_id ORDER BY count(vote_id) DESC LIMIT 1''')
+    cursor.execute('''SELECT id, user_id, url,
+        description, vote_count FROM posts ORDER BY vote_count DESC
+        LIMIT ?''', (count,))
 
-    #not done
+    results = cursor.fetchall()
+    conn.close()
 
-
-@app.route
-# Error handlers.
-@app.errorhandler(500)
-def internal_error(error):
-    # db_session.rollback()
-    return render_template('errors/500.html'), 500
+    return json.dumps(results, sort_keys=True,
+                      indent=4, separators=(",", ": ")),
+    status.HTTP_202_ACCEPTED
 
 
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('errors/404.html'), 404
+@app.route("/api/get_post", methods=["GET"])
+def get_post():
+
+    conn = sqlite3.connect(db_url)
+    try:
+        post_id = int(request.args.get("post_id"))
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    cursor = conn.cursor()
+
+    cursor.execute('''SELECT id, user_id, url, description, vote_count FROM
+        posts WHERE id=?''', (post_id,))
+
+    results = cursor.fetchone()
+    conn.close()
+
+    return json.dumps(results, sort_keys=True,
+                      indent=4, separators=(",", ": ")),
+    status.HTTP_202_ACCEPTED
+
+
+@app.route("/api/get_user_post", methods=["GET"])
+def get_user_post():
+
+    conn = sqlite3.connect(db_url)
+    try:
+        user_id = int(request.args.get("user_id"))
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    cursor = conn.cursor()
+
+    cursor.execute('''SELECT id, user_id, url, description, vote_count FROM
+        posts WHERE user_id=?''', (user_id,))
+
+    results = cursor.fetchone()
+    conn.close()
+
+    return json.dumps(results, sort_keys=True,
+                      indent=4, separators=(",", ": ")),
+    status.HTTP_202_ACCEPTED
+
+
+@app.route("/api/create_post", methods=["POST"])
+def create_post():
+
+    conn = sqlite3.connect(db_url)
+    try:
+        post_url = request.form["post_url"]
+        user_id = int(request.form["user_id"])
+    except:
+        return "", status.HTTP_400_BAD_REQUEST
+
+    conn.close()
+    return None
+
+
+# @app.route
+# # Error handlers.
+# @app.errorhandler(500)
+# def internal_error(error):
+#     # db_session.rollback()
+#     return render_template('errors/500.html'), 500
+
+
+# @app.errorhandler(404)
+# def not_found_error(error):
+#     return render_template('errors/404.html'), 404
 
 #----------------------------------------------------------------------------#
 # Launch.
