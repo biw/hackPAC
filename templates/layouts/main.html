@@ -163,7 +163,10 @@
 
   $(document).ready(function() {
 
-    clock = $('.clock').FlipClock(3600 * 24 * 2.5 - 5, {
+    var seconds = new Date().getTime() / 1000;
+
+    var sun = new Date("June 19, 2016 23:59:59").getTime() / 1000;
+    clock = $('.clock').FlipClock(sun - seconds, {
           clockFace: 'DailyCounter',
           countdown: true
       });
