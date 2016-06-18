@@ -12,15 +12,15 @@
     {% for post in posts %}
     {% for p in post %}
     <article-holder>
-    <post>
-        <votes>{{p[4]}}</votes>
-        <upvote>▲</upvote>
-        <a href=""><post-title>{{p[3]}}</post-title></a>
-    </post>
-<sub-post class="sub-post-min">
-    <iframe class="hidden-frame" hidden-src="{{p[2]}}"></iframe>
-    <p>+ Open the article inline</p>
-    </sub-post>
+	    <post id="{{p[0]}}">
+	        <votes>{{p[4]}}</votes>
+	        <upvote>▲</upvote>
+	        <a href=""><post-title>{{p[3]}}</post-title></a>
+	    </post>
+		<sub-post class="sub-post-min">
+		    <iframe class="hidden-frame" hidden-src="{{p[2]}}"></iframe>
+		    <p>+ Open the article inline</p>
+	    </sub-post>
 
     </article-holder>
     {% endfor %}
