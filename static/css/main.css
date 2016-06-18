@@ -122,6 +122,8 @@ article-holder {
 
 .right-right {
 	float: right;
+	text-align: center;
+	padding-right: 5px;
 }
 
 .right-right span {
@@ -131,4 +133,8 @@ article-holder {
 
 .fb_iframe_widget span {
 	vertical-align: baseline !important;
+}
+
+.navbar-brand  {
+	padding: 0;
 }
