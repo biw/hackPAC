@@ -100,12 +100,61 @@
 
   </div>
 
-  <div id="footer">
-    <div class="container">
-      <p>HackPAC &copy; All Rights Reserved.</p>
-      {% block footer %}{% endblock %}
-    </div>
-  </div>
+    <footer class="text-center">
+        <div class="footer-above">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-4">
+                        <h3>Location</h3>
+                        <p>3481 Melrose Place<br>Beverly Hills, CA 90210</p>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>Around the Web</h3>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a>
+                            </li>
+                            <li>
+                                <a href="#" class="btn-social btn-outline"><i class="fa fa-fw fa-dribbble"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>About HackPac</h3>
+                        <p>HackPac is a crowd sourcing platform that empowers people to fight superpacs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; HackPac 2016
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="/static/js/classie.js"></script>
+    <script src="/static/js/cbpAnimatedHeader.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="/static/js/jqBootstrapValidation.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/static/js/freelancer.js"></script>
 
   <script type="text/javascript">
 
@@ -155,35 +204,66 @@ var layout = {
   Plotly.newPlot('myDiv', data, layout, {staticPlot: true});
   </script>
 
-<!--   <script type="text/javascript">
-
-  var ultimateColors = [
-    ['rgb(56, 75, 126)', 'rgb(18, 36, 37)', 'rgb(34, 53, 101)', 'rgb(36, 55, 57)', 'rgb(6, 4, 4)'],
-    ['rgb(177, 127, 38)', 'rgb(205, 152, 36)', 'rgb(99, 79, 37)', 'rgb(129, 180, 179)', 'rgb(124, 103, 37)'],
-    ['rgb(33, 75, 99)', 'rgb(79, 129, 102)', 'rgb(151, 179, 100)', 'rgb(175, 49, 35)', 'rgb(36, 73, 147)'],
-    ['rgb(146, 123, 21)', 'rgb(177, 180, 34)', 'rgb(206, 206, 40)', 'rgb(175, 51, 21)', 'rgb(35, 36, 21)']
-  ];
-    var data = [{
-      values: [19, 26, 55],
-      labels: ['Residential', 'Non-Residential', 'Utility'],
-      marker: {
-        colors: ultimateColors[0]
+  <script type="text/javascript">
+          var data = [{
+        "name":"Societal",
+        "text": ["Why I Bought a House in Detroit for $500", 'There Is Going to Be a Destruction… The Obliteration of a Person', 'Diary'],
+        "marker": {
+          "sizemode":"area",
+          "sizeref":1,
+          "size": ["318","708","150"]
+        },
+        "mode":"markers",
+        "y": ["318","708","150"],
+        "x": ['05-18', '05-19', '05-20'],
+        "uid": "99da6d"
+      },{
+        "name":"Politics",
+        "text": ['The Day I Left My Son in the Car', 'This Old Man', 'On Kindness'],
+        "marker": {
+          "sizemode":"area",
+          "sizeref":1,
+          "size": ["360","819","103"]
+        },
+        "mode":"markers",
+        "y": ["360","819","103"],
+        "x": ['05-17', '05-18', '05-19'],
+        "uid": "9d3ba4"
+      },{
+        "name": "Environment",
+        "text": ['Dixie Zen', 'How to Be Polite', 'Working Anything but 9 to 5', 'Love Me Tinder', 'How Much My Novel Cost Me'],
+        "marker": {
+          "sizemode":"area",
+          "sizeref":1,
+          "size": ["333","124","807","163","143"]
+        },
+        "mode": "markers",
+        "y": ["333","124","807","163","143"],
+        "x": ['05-20', '05-21', '05-22', '05-23', '05-24'],
+        "uid": "22be38"
       },
-      type: 'pie',
-  hoverinfo: 'label+percent+name',
-  textinfo: 'none',
-  showlegend: false
-    }];
+      {
+        "name":"Tech",
+        "text": ['The Rise of Nintendo', 'One Startup’s Struggle to Survive the Silicon Valley Gold Rush', 'The Untold Story of Larry Page’s Incredible Comeback'],
+        "marker": {
+          "sizemode":"area",
+          "sizeref":1,
+          "size": ["403","911","190"]
+        },
+        "mode":"markers",
+        "y": ["403","911","190"],
+        "x": ['05-20', '05-21', '05-22'],
+        "uid":"c3a87b"
+      }];
 
-    var layout = {
-      height: 380,
-      width: 480
-    };
+      var layout = {
+        yaxis: {title: '# of Audience Reached'},
+        margin: {t: 20},
+        hovermode: 'closest'
+      };
 
-
-
-Plotly.newPlot('money-went', data, layout, {staticPlot:true});
-  </script> -->
+      Plotly.plot("my-graph", data, layout, {showLink: false});
+  </script>
   <!-- Google Analytics - Change UA-XXXXX-X to be your site's ID -->
   <script>
   window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']];

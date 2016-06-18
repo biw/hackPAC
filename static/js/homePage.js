@@ -22,7 +22,7 @@ $(document).ready(function(){
 // false: not logged in
 function updateHeaderBar(loggedInStatus) {
 	if (loggedInStatus) {
-		$("#username").replaceWith("<li><a href='/'>".concat(currentUserId, "</a></li>"));
+		$("#username").replaceWith("<li><a href='/dashboard'>".concat(currentUserId, "</a></li>"));
 		$("#loggedin").show();
 		$("#notloggedin").hide();
 	}

@@ -65,16 +65,17 @@ post {
     font-size: 20px;
 }
 votes {
-    background: #61a2ef;
+    background: #2c3e50;
     display: inline-block;
     padding: 0px 10px;
     margin: 0px;
     color: #fff;
+    min-width: 50px;
 }
 
 
-votes.used {
-    background: #61c76b;
+upvote.used {
+    opacity: .65;
 }
 
 upvote:hover {
@@ -83,7 +84,7 @@ upvote:hover {
 
 upvote {
     display: inline-block;
-    background: #61c76b;
+    background: #18bc9c;
     padding: 0px 11px;
     margin: 0px 0px 0px -6px;
     color: #fff;
