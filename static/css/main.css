@@ -46,4 +46,8 @@ a {
 	font-size: 15px;
 	font-family: sans-serif;
 }
+
+.money {
+	color: rgb(27, 155, 40);
+}
 /* Various other styles end */
