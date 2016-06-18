@@ -1,0 +1,37 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+
+
+<div class="clock col-center"></div>
+
+<div id="articles">
+    <article-holder>
+    <post>
+        <votes>100</votes>
+        <upvote>▲</upvote>
+        <a href=""><post-title>It's about time we got serious about drinking water</post-title></a>
+    </post>
+<sub-post>
+    + Open the <a href="https://cleanwater.com">cleanwater.com</a> article inline
+    </sub-post>
+    </article-holder>
+
+        <article-holder>
+    <post>
+        <votes class="used">99</votes>
+        <upvote>▲</upvote>
+        <a href=""><post-title>Iowa is about to stop paying for the homeless. WTF</post-title></a>
+    </post>
+<sub-post>
+    + Open the <a href="https://cnn.com">cnn.com</a> article inline
+    </sub-post>
+    </article-holder>
+
+</div>
+
+
+{% endblock %}
+
+
